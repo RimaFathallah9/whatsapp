@@ -14,9 +14,23 @@ Manages WhatsApp through the **WhatsApp Web window already logged in on this lap
 
 ## One-time setup
 
-```bash
-npm install
+If PowerShell blocks `npm` (`npm.ps1 cannot be loaded because running scripts is disabled`), use the `.cmd` files or `npm.cmd` instead:
+
+```bat
+.\install.cmd
 copy .env.example .env
+```
+
+Or in the same PowerShell window:
+
+```powershell
+npm.cmd install
+```
+
+To allow `npm` itself in PowerShell from now on (current user only):
+
+```powershell
+Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
 ```
 
 Put your Claude API key in `.env`:
@@ -32,20 +46,20 @@ Without a key, the agent still reports, but it will not auto-send.
 
 Chrome must be started with remote debugging so the agent can use the same window where you are already logged in.
 
-```bash
-npm run chrome
+```bat
+.\chrome.cmd
 ```
 
 Confirm [web.whatsapp.com](https://web.whatsapp.com) shows your chat list (not a QR code). Leave that window open.
 
-```bash
-npm run agent
+```bat
+.\agent.cmd
 ```
 
 Dry run (no sends):
 
-```bash
-npm run dry-run
+```bat
+.\dry-run.cmd
 ```
 
 If Chrome was already open without debugging, close every Chrome window first, then `npm run chrome`.
