@@ -6,7 +6,7 @@
   "description": "WhatsApp Web conversation manager driven by a replaceable policy markdown file and Claude Haiku.",
   "scripts": {
     "agent": "tsx src/index.ts",
-    "chrome": "tsx src/chrome-debug.ts",
+    "chrome": "tsx src/launch-chrome.ts",
     "dry-run": "tsx src/index.ts --dry-run"
   },
   "engines": {

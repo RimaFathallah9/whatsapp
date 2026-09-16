@@ -1,7 +1,6 @@
 @echo off
 setlocal
 cd /d "%~dp0"
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%~dp0scripts\attach-chrome.ps1"
-if errorlevel 1 exit /b %ERRORLEVEL%
+echo CHROME_ATTACH_V4
 call npm.cmd run dry-run
 exit /b %ERRORLEVEL%
