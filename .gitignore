@@ -1,0 +1,9 @@
+node_modules/
+dist/
+.env
+.chrome-cdp-profile/
+reports/*.md
+reports/*.jsonl
+!reports/.gitkeep
+debug/
+*.log

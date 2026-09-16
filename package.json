@@ -1,0 +1,25 @@
+{
+  "name": "whatsapp-inbox-agent",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "WhatsApp Web conversation manager driven by a replaceable policy markdown file and Claude Haiku.",
+  "scripts": {
+    "agent": "tsx src/index.ts",
+    "chrome": "tsx src/chrome-debug.ts",
+    "dry-run": "tsx src/index.ts --dry-run"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "dotenv": "^16.6.1",
+    "playwright-core": "^1.55.1",
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "@types/node": "^22.18.0",
+    "tsx": "^4.20.5",
+    "typescript": "^5.9.2"
+  }
+}
