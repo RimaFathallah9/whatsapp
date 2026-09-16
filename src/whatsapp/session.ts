@@ -10,14 +10,17 @@ export type WhatsAppSession = {
 };
 
 export async function connectWhatsApp(): Promise<WhatsAppSession> {
-  const { context, page } = await launchWhatsAppChrome();
+  const launched = await launchWhatsAppChrome();
+  let page = launched.page;
+  const whatsapp = launched.context.pages().find((p) => p.url().includes("web.whatsapp.com"));
+  if (whatsapp) page = whatsapp;
   await waitForWhatsAppReady(page);
   return {
     browser: null,
-    context,
+    context: launched.context,
     page,
     close: async () => {
-      await context.close().catch(() => undefined);
+      await launched.context.close().catch(() => undefined);
     },
   };
 }

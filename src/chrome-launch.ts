@@ -4,7 +4,7 @@ import path from "node:path";
 import { chromium, type BrowserContext, type Page } from "playwright-core";
 import { chromePath, chromeUserDataDir, envString } from "./config.js";
 
-export const ATTACH_VERSION = "CHROME_ATTACH_V5";
+export const ATTACH_VERSION = "CHROME_ATTACH_V6";
 
 export type ChromeAccount = {
   dir: string;

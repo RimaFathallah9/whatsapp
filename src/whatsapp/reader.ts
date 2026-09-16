@@ -1,6 +1,7 @@
 import type { Page } from "playwright-core";
 import type { ChatMessage, Conversation } from "../types.js";
 import { openChat } from "./open-chat.js";
+import { withPageRetry } from "./page-utils.js";
 
 type RawChat = {
   contact: string;
@@ -54,7 +55,7 @@ function withinLookback(timestamp: number, lookbackMinutes: number, now: number)
 }
 
 async function scrapeChatList(page: Page): Promise<RawChat[]> {
-  return page.evaluate(() => {
+  return withPageRetry(page, () => page.evaluate(() => {
     const root =
       document.querySelector("#pane-side") ||
       document.querySelector("[aria-label='Chat list']") ||
@@ -91,11 +92,11 @@ async function scrapeChatList(page: Page): Promise<RawChat[]> {
       });
     }
     return chats;
-  });
+  }));
 }
 
 async function scrapeOpenMessages(page: Page): Promise<RawMessage[]> {
-  return page.evaluate(() => {
+  return withPageRetry(page, () => page.evaluate(() => {
     const nodes = Array.from(document.querySelectorAll("div.copyable-text[data-pre-plain-text]")) as HTMLElement[];
     return nodes.slice(-40).map((node) => {
       const prePlain = node.getAttribute("data-pre-plain-text") || "";
@@ -118,7 +119,7 @@ async function scrapeOpenMessages(page: Page): Promise<RawMessage[]> {
         prePlain,
       };
     });
-  });
+  }));
 }
 
 function toMessages(raw: RawMessage[], contact: string, now: Date): ChatMessage[] {
