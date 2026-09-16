@@ -1,5 +1,7 @@
 import { spawn } from "node:child_process";
-import { chromePath, chromeUserDataDir, envInt, envString } from "./config.js";
+import fs from "node:fs";
+import path from "node:path";
+import { chromePath, envInt, envString } from "./config.js";
 
 export type CdpTarget = {
   id: string;
@@ -11,6 +13,11 @@ export type CdpTarget = {
 
 function cdpBase(): string {
   return envString("CHROME_CDP_URL", `http://127.0.0.1:${envInt("CHROME_DEBUG_PORT", 9222)}`);
+}
+
+export function chromeDebugUserDataDir(): string {
+  const localApp = process.env.LOCALAPPDATA || "";
+  return path.join(localApp, "WhatsAppInboxAgent", "Chrome");
 }
 
 export async function cdpAvailable(): Promise<boolean> {
@@ -35,7 +42,7 @@ export async function waitForCdp(timeoutMs = 25000): Promise<void> {
     await new Promise((r) => setTimeout(r, 500));
   }
   throw new Error(
-    `Chrome DevTools is not reachable at ${cdpBase()}. Close Chrome fully, then run: npm run chrome`,
+    `Chrome DevTools is not reachable at ${cdpBase()}. Close Chrome fully, then run: .\\chrome.cmd`,
   );
 }
 
@@ -46,16 +53,27 @@ export function launchChromeWithDebugging(): void {
   }
 
   const port = envInt("CHROME_DEBUG_PORT", 9222);
-  const profile = envString("CHROME_PROFILE", "Default");
-  const userData = chromeUserDataDir();
+  const debugDir = chromeDebugUserDataDir();
+  const marker = path.join(debugDir, "agent-profile.txt");
+  const profile =
+    envString("CHROME_PROFILE") ||
+    (fs.existsSync(marker) ? fs.readFileSync(marker, "utf8").trim() : "") ||
+    "Profile 1";
+  if (!fs.existsSync(debugDir)) {
+    throw new Error("Run .\\chrome.cmd first so the your-chrome debug profile can be created.");
+  }
+
   const args = [
     `--remote-debugging-port=${port}`,
     "--remote-debugging-address=127.0.0.1",
+    "--remote-allow-origins=*",
+    `--user-data-dir=${debugDir}`,
     `--profile-directory=${profile}`,
-    "--new-window",
+    "--no-first-run",
+    "--no-default-browser-check",
+    "--disable-features=ProfilePickerOnStartup",
     "https://web.whatsapp.com",
   ];
-  if (userData) args.unshift(`--user-data-dir=${userData}`);
 
   const child = spawn(exe, args, {
     detached: true,
@@ -73,7 +91,7 @@ export async function ensureChromeDebugging(): Promise<string> {
     return cdpBase();
   } catch (error) {
     throw new Error(
-      `${error instanceof Error ? error.message : String(error)}\n\nChrome is probably already running without debugging enabled. WhatsApp Web login lives in that Chrome profile, so this agent cannot open a second copy.\n\nDo this once:\n  1. Close every Chrome window (system tray too).\n  2. Run: npm run chrome\n  3. Confirm WhatsApp Web is logged in on that window.\n  4. Run: npm run agent`,
+      `${error instanceof Error ? error.message : String(error)}\n\nRun only .\\chrome.cmd first, wait until WhatsApp Web loads, then .\\agent.cmd.`,
     );
   }
 }

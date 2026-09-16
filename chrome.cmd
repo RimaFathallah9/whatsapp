@@ -1,4 +1,5 @@
 @echo off
+setlocal
 cd /d "%~dp0"
-call npm.cmd run chrome
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%~dp0scripts\attach-chrome.ps1"
 exit /b %ERRORLEVEL%

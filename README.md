@@ -44,13 +44,7 @@ Without a key, the agent still reports, but it will not auto-send.
 
 ## Every run
 
-Chrome must be started with remote debugging so the agent can use the same window where you are already logged in.
-
-```bat
-.\chrome.cmd
-```
-
-Confirm [web.whatsapp.com](https://web.whatsapp.com) shows your chat list (not a QR code). Leave that window open.
+`chrome.cmd`, `agent.cmd`, and `dry-run.cmd` all open the **your chrome** profile (not Guest, not the picker).
 
 ```bat
 .\agent.cmd
@@ -62,7 +56,13 @@ Dry run (no sends):
 .\dry-run.cmd
 ```
 
-If Chrome was already open without debugging, close every Chrome window first, then `npm run chrome`.
+Or only start Chrome first:
+
+```bat
+.\chrome.cmd
+```
+
+Confirm [web.whatsapp.com](https://web.whatsapp.com) shows your chat list (not a QR code).
 
 ## Update how it answers
 

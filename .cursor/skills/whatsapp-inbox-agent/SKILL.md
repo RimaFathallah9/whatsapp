@@ -17,20 +17,15 @@ Run the local WhatsApp Web agent in this repo. It attaches to the **existing Wha
 
 ## How to run
 
-From the repo root:
+From the repo root, use the `.cmd` files so they open the **your chrome** profile (not Guest):
 
-```bash
-npm run chrome
-npm run agent
+```bat
+.\chrome.cmd
+.\agent.cmd
+.\dry-run.cmd
 ```
 
-`npm run chrome` is only needed when Chrome was not started with remote debugging. If the agent says Chrome is already running without debugging, tell the user to close every Chrome window, then run `npm run chrome`, confirm WhatsApp Web is logged in, and rerun `npm run agent`.
-
-Dry run (classify + report, never send):
-
-```bash
-npm run dry-run
-```
+`agent.cmd` and `dry-run.cmd` attach to that same Chrome account first, then run. If Chrome was already open without debugging, they close it and reopen **your chrome**.
 
 After the command finishes, read `reports/latest.md` and show that report to the user in this exact structure:
 
