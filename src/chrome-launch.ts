@@ -4,7 +4,7 @@ import path from "node:path";
 import { chromium, type BrowserContext, type Page } from "playwright-core";
 import { chromePath, chromeUserDataDir, envString } from "./config.js";
 
-export const ATTACH_VERSION = "CHROME_ATTACH_V4";
+export const ATTACH_VERSION = "CHROME_ATTACH_V5";
 
 export type ChromeAccount = {
   dir: string;
@@ -179,8 +179,9 @@ export async function launchWhatsAppChrome(): Promise<{
   let page = context.pages().find((p) => p.url().includes("web.whatsapp.com")) ?? context.pages()[0];
   if (!page) page = await context.newPage();
   if (!page.url().includes("web.whatsapp.com")) {
-    await page.goto("https://web.whatsapp.com", { waitUntil: "domcontentloaded", timeout: 60000 });
+    await page.goto("https://web.whatsapp.com", { waitUntil: "commit", timeout: 60000 });
   }
+  process.stdout.write("Waiting for WhatsApp chat list...\n");
   return { context, page };
 }
 

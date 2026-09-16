@@ -1,6 +1,6 @@
 @echo off
 setlocal
 cd /d "%~dp0"
-echo CHROME_ATTACH_V4
+echo CHROME_ATTACH_V5
 call npm.cmd run agent
 exit /b %ERRORLEVEL%

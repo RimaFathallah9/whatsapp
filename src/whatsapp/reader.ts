@@ -147,25 +147,42 @@ export async function readRecentConversations(
 ): Promise<Conversation[]> {
   const now = new Date();
   const nowMs = now.getTime();
-  const list = await scrapeChatList(page);
-  const conversations: Conversation[] = [];
 
+  let list = await scrapeChatList(page);
+  if (list.length === 0) {
+    await page.waitForTimeout(3000);
+    list = await scrapeChatList(page);
+  }
+
+  const conversations: Conversation[] = [];
   const candidates = list.filter((chat) => {
     const ts = parseClockToday(chat.timeLabel, now);
     if (ts) return withinLookback(ts, lookbackMinutes, nowMs);
-    if (!chat.timeLabel || /today/i.test(chat.timeLabel)) return chat.unread;
-    return false;
+    if (!chat.timeLabel || /today|hoy/i.test(chat.timeLabel)) return true;
+    return chat.unread;
   });
 
-  for (const chat of candidates) {
+  const toOpen = candidates.length > 0 ? candidates : list.slice(0, 12);
+
+  for (const chat of toOpen) {
     const opened = await openChat(page, chat.contact);
-    if (!opened) continue;
-    const raw = await scrapeOpenMessages(page);
+    const raw = opened ? await scrapeOpenMessages(page) : [];
     let messages = toMessages(raw, chat.contact, now).filter((msg) =>
       withinLookback(msg.timestamp, lookbackMinutes, nowMs),
     );
     if (messages.length === 0) {
       messages = toMessages(raw, chat.contact, now).slice(-8);
+    }
+    if (messages.length === 0 && chat.preview) {
+      messages = [
+        {
+          fromMe: false,
+          sender: chat.contact,
+          text: chat.preview,
+          timestamp: parseClockToday(chat.timeLabel, now) || nowMs,
+          timeLabel: chat.timeLabel,
+        },
+      ];
     }
     const last = messages[messages.length - 1];
     conversations.push({
