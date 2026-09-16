@@ -1,0 +1,26 @@
+{
+  "manifest_version": 3,
+  "name": "WhatsApp Urgent Briefing",
+  "version": "1.0.0",
+  "description": "Private local extension. Shows only the most urgent WhatsApp item: what they need, and what you should answer.",
+  "action": {
+    "default_title": "Urgent briefing",
+    "default_popup": "popup.html"
+  },
+  "options_page": "options.html",
+  "background": {
+    "service_worker": "background.js"
+  },
+  "permissions": ["storage", "tabs", "scripting", "clipboardWrite"],
+  "host_permissions": [
+    "https://web.whatsapp.com/*",
+    "https://api.anthropic.com/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["https://web.whatsapp.com/*"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ]
+}

@@ -105,15 +105,18 @@ export async function classifyConversations(
     return conversations.map((c) => heuristicDecision(c, policy));
   }
 
-  const system = `You are Claude Haiku acting as my WhatsApp conversation manager. Classify each conversation using ONLY the policy markdown and the conversation text.
+  const system = `You are Claude Haiku acting as my private WhatsApp briefing officer. Classify each conversation using ONLY the policy markdown and the conversation text.
+
+You always write as me: a senior recruiter, lawyer, or commercial operator — pick the hat the thread requires. Calm, precise, first person. Never intern tone. Never as an AI.
 
 Return JSON: {"decisions":[{...}]}.
 
 Each decision:
 - contact, chatId, topic, whatTheySaid, theyNeed
+- theyNeed: one short line — what they actually require from me
 - priority: urgent | important | normal | low
 - disposition: auto_reply | needs_you | no_action
-- suggestedReply: the message I should send (even if disposition is needs_you)
+- suggestedReply: the exact message I should send (even if disposition is needs_you)
 - autoReplyText: only if disposition is auto_reply; the exact message to send
 - reason, confidence 0-1, uncertainty boolean, requiresApproval boolean
 
@@ -121,7 +124,8 @@ Hard rules:
 - auto_reply only when the policy says it is safe AND you are not uncertain AND you are not inventing facts AND you are not making a decision for me.
 - If uncertain, disposition must be needs_you, uncertainty true, requiresApproval true, autoReplyText omitted.
 - suggestedReply must be in the contact's language.
-- Speak as me (first person), never as an AI.`;
+- Speak as me (first person), never as an AI.
+- Prefer escalating anything commercial, legal, hiring, or time-critical.`;
 
   const user = `POLICY FILE (${policy.filePath}):
 ${policy.markdown}

@@ -42,7 +42,28 @@ CLAUDE_MODEL=claude-haiku-4-5
 
 Without a key, the agent still reports, but it will not auto-send.
 
-## Every run
+## Private Chrome extension
+
+Unpacked, this computer only — not on the Chrome Web Store.
+
+1. Open `chrome://extensions`
+2. Turn on **Developer mode**
+3. **Load unpacked** and select the `extension` folder in this project
+4. Open the extension **Policy & key** page, paste `ANTHROPIC_API_KEY`, and paste or keep the `.md` policy
+5. Open [WhatsApp Web](https://web.whatsapp.com) in **your chrome**
+6. Click the extension icon
+
+The popup shows **only the most urgent item**: what they need, and the reply you should send, in your voice as a senior recruiter, lawyer, or commercial operator. Routine threads stay out of the popup. The extension does not send messages.
+
+Or run:
+
+```bat
+.\load-extension.cmd
+```
+
+## Desktop agent
+
+The original Playwright agent is still here if you want a full report instead of the popup:
 
 `chrome.cmd`, `agent.cmd`, and `dry-run.cmd` all open the **your chrome** profile (not Guest, not the picker).
 

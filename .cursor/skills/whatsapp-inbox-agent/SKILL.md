@@ -7,7 +7,9 @@ description: Manages WhatsApp Web conversations on this laptop. Use when the use
 
 ## What this skill does
 
-Run the local WhatsApp Web agent in this repo. It attaches to the **existing WhatsApp Web session in Chrome on this laptop**. Claude Haiku (Claude API) applies `skills/conversation-policy.md`. It does not use a phone app.
+Run the local WhatsApp Web agent in this repo, or the private unpacked Chrome extension in `extension/`. Both attach to the **existing WhatsApp Web session in Chrome on this laptop**. Claude Haiku (Claude API) applies `skills/conversation-policy.md`. It does not use a phone app.
+
+The Chrome extension popup shows **only the most urgent item**: what they need, and what you should answer. Drafts are first-person as a senior recruiter, lawyer, or commercial operator.
 
 ## Always do this first
 
@@ -17,7 +19,9 @@ Run the local WhatsApp Web agent in this repo. It attaches to the **existing Wha
 
 ## How to run
 
-From the repo root, use the `.cmd` files so they open the **your chrome** profile (not Guest):
+Private popup (most urgent item only): load the unpacked `extension/` folder in `chrome://extensions`, open WhatsApp Web, click the icon.
+
+Desktop report (full five-part file): from the repo root, use the `.cmd` files so they open the **your chrome** profile (not Guest):
 
 ```bat
 .\chrome.cmd
@@ -47,8 +51,9 @@ After the command finishes, read `reports/latest.md` and show that report to the
 
 | Layer | Location | Change when |
 | --- | --- | --- |
-| Behavior / replies | `skills/*.md` | User updates rules |
-| WhatsApp Web I/O | `src/whatsapp/` | UI selectors break |
+| Behavior / replies | `skills/*.md` and `extension/policy.md` | User updates rules |
+| Private popup | `extension/` | Chrome extension UI |
+| WhatsApp Web I/O | `src/whatsapp/` and `extension/content.js` | UI selectors break |
 | Claude Haiku | `src/llm/` | Claude API / model id |
 | Classification | `src/analyze/` | Schema changes |
 | Safety gate | `src/safety/` | Extra send checks |

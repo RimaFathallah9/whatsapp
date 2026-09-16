@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Urgent briefing — settings</title>
+    <link rel="stylesheet" href="popup.css" />
+    <style>
+      body {
+        width: auto;
+        max-width: 720px;
+        min-height: 100vh;
+        margin: 0 auto;
+      }
+      label {
+        display: block;
+        margin: 16px 0 6px;
+        font-size: 11px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: #8a6d3b;
+      }
+      input,
+      textarea {
+        width: 100%;
+        border: 1px solid #d7ceba;
+        background: #fff;
+        color: #1b2118;
+        padding: 8px 10px;
+        font: 14px/1.45 "Segoe UI", sans-serif;
+      }
+      textarea {
+        min-height: 360px;
+        font-family: Consolas, "Courier New", monospace;
+        font-size: 12px;
+      }
+      .note {
+        color: #6d6456;
+        font-size: 13px;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <p class="kicker">Private · this computer only</p>
+      <h1>Policy &amp; key</h1>
+    </header>
+    <main>
+      <p class="note">
+        This unpacked extension is only on your machine. Paste your Claude API key here. Replace the
+        markdown below with your own <code>.md</code> — that file is the only decision layer.
+      </p>
+      <label for="apiKey">Claude API key</label>
+      <input id="apiKey" type="password" autocomplete="off" placeholder="sk-ant-…" />
+      <label for="model">Model</label>
+      <input id="model" type="text" value="claude-haiku-4-5" />
+      <label for="policy">Conversation policy (.md)</label>
+      <textarea id="policy" spellcheck="false"></textarea>
+      <p id="saved" class="status"></p>
+    </main>
+    <footer>
+      <button type="button" id="save">Save</button>
+      <button type="button" class="ghost" id="reload">Reload default .md</button>
+    </footer>
+    <script src="options.js"></script>
+  </body>
+</html>
